@@ -5,7 +5,11 @@ from Data_base import sqlite_db
 
 async def start(message: types.Message):
     sql_user_id = await sqlite_db.sql_read_user(message.from_user.id)
-    if message.from_user.id == sql_user_id[0][0]:
+    try:
+        user_id = sql_user_id[0][0]
+    except IndexError:
+        user_id = None
+    if message.from_user.id == user_id:
         mess = f'Привет, <b>{message.from_user.first_name} <u>{message.from_user.last_name}</u></b>'
         await message.answer(mess, parse_mode='html', reply_markup=Client_keyboard.client_markup)
     else:
